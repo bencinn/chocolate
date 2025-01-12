@@ -1,0 +1,15 @@
+{
+  "name": "chocolate_libvm",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "chocolate_libvm_bg.wasm",
+    "chocolate_libvm.js",
+    "chocolate_libvm.d.ts"
+  ],
+  "main": "chocolate_libvm.js",
+  "types": "chocolate_libvm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
