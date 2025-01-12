@@ -1,4 +1,6 @@
 name: Rust
+permissions:
+  contents: write
 
 on:
   push:
@@ -35,3 +37,20 @@ jobs:
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
     - name: Build wasm
       run: wasm-pack build --target web ./chocolate_libvm
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    - name: Build wasm
+      run: wasm-pack build --target web ./chocolate_libvm --release
+    - name: Prepare directory
+      run: mkdir ./chocolate_libvm/web-build && cp -r ./chocolate_libvm/pkg ./chocolate_libvm/web-build && cp ./chocolate_libvm/index.html ./chocolate_libvm/web-build
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        folder: ./chocolate_libvm/web-build
+        clean: true
