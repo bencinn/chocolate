@@ -3,5 +3,4 @@ members = [
     "chocolate_libvm",
     "chocolate"
 ]
-
-workspace.resolver = 1
+resolver = "2"
