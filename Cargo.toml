@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "chocolate_libvm",
+    "chocolate"
+]
