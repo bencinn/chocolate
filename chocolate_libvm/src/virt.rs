@@ -76,7 +76,6 @@ impl VMData {
     pub fn step_execute(&mut self, inst: &Instruction) {
         let ep = Instruction::get_instruction(inst.inst, 0);
         self.next = self.pc + 1;
-        dbg!(&ep);
         match ep {
             EP::Halt => {}
             EP::Mov => {
