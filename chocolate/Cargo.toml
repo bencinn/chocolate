@@ -1,7 +1,0 @@
-[package]
-name = "chocolate"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-chocolate_libvm = {path = "../chocolate_libvm"}
