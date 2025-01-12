@@ -3,7 +3,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
 pub struct Program {
-    build_info: Option<String>,
+    #[wasm_bindgen(skip)]
+    pub build_info: Option<String>,
 
     #[wasm_bindgen(skip)]
     pub insts: Vec<Instruction>,
@@ -55,8 +56,4 @@ impl Program {
         raw
     }
 
-}
-
-mod tests {
-    use super::*;
 }

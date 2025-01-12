@@ -114,6 +114,7 @@ impl Instruction {
 }
 
 mod tests {
+    #[cfg(test)]
     use super::*;
 
     #[test]

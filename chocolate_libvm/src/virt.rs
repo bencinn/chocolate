@@ -217,6 +217,7 @@ impl VMData {
 }
 
 mod tests {
+    #[cfg(test)]
     use super::*;
 
     #[test]
