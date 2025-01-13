@@ -23,6 +23,7 @@ pub enum EP {
     Cmp,
     Jmp,
     Je,
+    Jz,
     Invalid,
 }
 
@@ -48,6 +49,7 @@ impl Instruction {
             10 => EP::Cmp,
             11 => EP::Jmp,
             12 => EP::Je,
+            13 => EP::Jz,
             _ => EP::Invalid,
         }
     }
@@ -55,8 +57,8 @@ impl Instruction {
     fn resolve_argument_count(ep: EP) -> usize {
         match ep {
             EP::Invalid | EP::Halt => 0,
-            EP::Read | EP::Push | EP::Pop | EP::Interrupt | EP::Jmp | EP::Je => 1,
-            EP::Mov | EP::AddR | EP::SubR | EP::Add | EP::Sub | EP::Cmp => 2
+            EP::Read | EP::Push | EP::Pop | EP::Interrupt | EP::Jmp | EP::Je | EP::Jz => 1,
+            EP::Mov | EP::AddR | EP::SubR | EP::Add | EP::Sub | EP::Cmp => 2,
         }
     }
 
@@ -70,32 +72,32 @@ impl Instruction {
         // 24-31: reserved
         let mut insts = Vec::new();
         let mut p = 0;
-        while p<code.len() {
+        while p < code.len() {
             let inst = code[p];
-            let param_1 = Some(i8::from_ne_bytes([code[p+1]]));
-            let param_2 = Some(i8::from_ne_bytes([code[p+2]]));
+            let param_1 = Some(i8::from_ne_bytes([code[p + 1]]));
+            let param_2 = Some(i8::from_ne_bytes([code[p + 2]]));
             let ep = Instruction::get_instruction(inst, 0);
             let count = Instruction::resolve_argument_count(ep);
             insts.push(match count {
                 0 => Instruction {
                     inst,
                     param_1: None,
-                    param_2: None
+                    param_2: None,
                 },
                 1 => Instruction {
                     inst,
                     param_1,
-                    param_2: None
+                    param_2: None,
                 },
                 2 => Instruction {
                     inst,
                     param_1,
-                    param_2
+                    param_2,
                 },
-                _ => unreachable!()
+                _ => unreachable!(),
             });
 
-            p+=4; // 4*8==32
+            p += 4; // 4*8==32
         }
         insts
     }

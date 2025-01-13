@@ -1,8 +1,8 @@
 use wasm_bindgen::prelude::*;
 
 pub mod instruction;
-pub mod virt;
 pub mod program;
+pub mod virt;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

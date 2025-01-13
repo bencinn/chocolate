@@ -105,7 +105,6 @@ impl VMData {
                     let result = first_read.overflowing_sub(self.read_reg(val2));
                     self.flags[3] = result.1;
                     self.write_reg(val, result.0);
-
                 } else {
                     self.status = Status::Undefined;
                 }
@@ -144,8 +143,7 @@ impl VMData {
                     let val2 = self.pop_stack();
                     if let Some(val2) = val2 {
                         self.write_reg(val, val2);
-                    }
-                    else {
+                    } else {
                         self.status = Status::Undefined;
                     }
                 } else {
@@ -171,10 +169,11 @@ impl VMData {
                 }
             }
             EP::Cmp => {
-                if let (Some(val), Some(val2)) = (inst.param_1, inst.param_2) {
-                    self.flags[0] = self.read_reg(val) == self.read_reg(val2);
-                    self.flags[1] = self.read_reg(val) > self.read_reg(val2);
-                    self.flags[2] = self.read_reg(val) < self.read_reg(val2);
+                if let (Some(dest), Some(source)) = (inst.param_1, inst.param_2) {
+                    self.flags[0] = self.read_reg(source) == self.read_reg(dest);
+                    self.flags[1] = self.read_reg(source) < self.read_reg(dest);
+                    self.flags[2] = self.read_reg(source) > self.read_reg(dest);
+                    self.flags[4] = self.read_reg(source) == 0;
                 } else {
                     self.status = Status::Undefined;
                 }
@@ -189,6 +188,15 @@ impl VMData {
             EP::Je => {
                 if let Some(val) = inst.param_1 {
                     if self.flags[0] {
+                        self.next = self.read_reg(val) as usize;
+                    }
+                } else {
+                    self.status = Status::Undefined;
+                }
+            }
+            EP::Jz => {
+                if let Some(val) = inst.param_1 {
+                    if self.flags[4] {
                         self.next = self.read_reg(val) as usize;
                     }
                 } else {
@@ -397,5 +405,69 @@ mod tests {
         let mut vm = VMData::new();
         vm.step_execute(&read);
         assert!(matches!(vm.status, Status::Undefined));
+    }
+
+    #[test]
+    fn test_cmp_source_zero() {
+        let cmp = Instruction {
+            inst: 10,
+            param_1: Some(1),
+            param_2: Some(0),
+        };
+        let mut vm = VMData::new();
+        vm.reg_8bit[0] = 0;
+        vm.reg_8bit[1] = 1;
+        vm.step_execute(&cmp);
+        assert!(vm.flags[4]);
+        let cmp2 = Instruction {
+            inst: 10,
+            param_1: Some(1),
+            param_2: Some(1),
+        };
+        vm.step_execute(&cmp2);
+        assert!(!vm.flags[4]);
+    }
+
+    #[test]
+    fn test_cmp() {
+        let cmp = Instruction {
+            inst: 10,
+            param_1: Some(1),
+            param_2: Some(0),
+        };
+        let mut vm = VMData::new();
+        vm.reg_8bit[0] = 1;
+        vm.reg_8bit[1] = 1;
+        vm.step_execute(&cmp);
+        assert!(vm.flags[0]);
+        assert!(!vm.flags[1]);
+        assert!(!vm.flags[2]);
+        let cmp_lt = Instruction {
+            inst: 10,
+            param_1: Some(2),
+            param_2: Some(1),
+        };
+        vm.reg_8bit[2] = 2;
+        vm.step_execute(&cmp_lt);
+        assert!(!vm.flags[0]);
+        assert!(vm.flags[1]);
+        assert!(!vm.flags[2]);
+    }
+
+    #[test]
+    fn test_jz() {
+        let jz = Instruction {
+            inst: 13,
+            param_1: Some(1),
+            param_2: None,
+        };
+        let mut vm = VMData::new();
+        vm.reg_8bit[1] = 3;
+        vm.flags[4] = true;
+        vm.step_execute(&jz);
+        assert_eq!(vm.pc, 3);
+        vm.flags[4] = false;
+        vm.step_execute(&jz);
+        assert_eq!(vm.pc, 4);
     }
 }

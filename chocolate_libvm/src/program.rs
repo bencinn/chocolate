@@ -16,7 +16,7 @@ impl Program {
     pub fn new() -> Program {
         Program {
             build_info: None,
-            insts: Vec::new()
+            insts: Vec::new(),
         }
     }
     pub fn push_instruction(&mut self, inst: &str) {
@@ -35,15 +35,22 @@ impl Program {
     }
 
     pub fn get_instruction_str(&self, pos: usize) -> String {
-        if pos>=self.insts.len() {
+        if pos >= self.insts.len() {
             "".to_string()
-        }
-        else {
+        } else {
             #[cfg(target_arch = "wasm32")]
-            return format!("<b>{}</b> {:?}, {:?}", self.insts[pos].inst, self.insts[pos].param_1, self.insts[pos].param_2).to_string();
+            return format!(
+                "<b>{}</b> {:?}, {:?}",
+                self.insts[pos].inst, self.insts[pos].param_1, self.insts[pos].param_2
+            )
+            .to_string();
 
             #[cfg(not(target_arch = "wasm32"))]
-            return format!("{} {:?} {:?}", self.insts[pos].inst, self.insts[pos].param_1, self.insts[pos].param_2).to_string();
+            return format!(
+                "{} {:?} {:?}",
+                self.insts[pos].inst, self.insts[pos].param_1, self.insts[pos].param_2
+            )
+            .to_string();
         }
     }
 
@@ -51,9 +58,11 @@ impl Program {
         let mut raw = String::new();
         for inst in &self.insts {
             let raw_inst = inst.to_raw();
-            raw.push_str(&format!("{:02x} {:02x} {:02x} {:02x} ", raw_inst[0], raw_inst[1], raw_inst[2], raw_inst[3]));
+            raw.push_str(&format!(
+                "{:02x} {:02x} {:02x} {:02x} ",
+                raw_inst[0], raw_inst[1], raw_inst[2], raw_inst[3]
+            ));
         }
         raw
     }
-
 }
