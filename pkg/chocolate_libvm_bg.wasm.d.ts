@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const greet: (a: number, b: number) => void;
 export const __wbg_vmdata_free: (a: number, b: number) => void;
 export const __wbg_get_vmdata_pc: (a: number) => number;
 export const __wbg_set_vmdata_pc: (a: number, b: number) => void;
@@ -12,7 +13,6 @@ export const vmdata_new: () => number;
 export const vmdata_execute_from_program: (a: number, b: number) => number;
 export const vmdata_read_reg: (a: number, b: number) => number;
 export const vmdata_read_stack: (a: number) => number;
-export const greet: (a: number, b: number) => void;
 export const __wbg_program_free: (a: number, b: number) => void;
 export const program_new: () => number;
 export const program_push_instruction: (a: number, b: number, c: number) => void;
