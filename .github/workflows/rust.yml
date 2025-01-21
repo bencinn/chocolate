@@ -48,7 +48,7 @@ jobs:
     - name: Build wasm
       run: wasm-pack build --target web ./chocolate_libvm --release
     - name: Prepare directory
-      run: rm -rf ./chocolate_libvm/web-build && mkdir ./chocolate_libvm/web-build && cp -r ./chocolate_libvm/pkg ./chocolate_libvm/web-build && cp ./chocolate_libvm/index.html ./chocolate_libvm/web-build && rm ./chocolate_libvm/web-build/pkg/.gitignore
+      run: rm -rf ./chocolate_libvm/web-build && mkdir ./chocolate_libvm/web-build && cp -r ./chocolate_libvm/pkg ./chocolate_libvm/web-build && cp ./chocolate_libvm/index.html ./chocolate_libvm/web-build && cp ./chocolate_libvm/load_style.js ./chocolate_libvm/web-build && cp ./chocolate_libvm/style.css ./chocolate_libvm/web-build && rm ./chocolate_libvm/web-build/pkg/.gitignore
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:

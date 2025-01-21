@@ -83,8 +83,8 @@ impl Instruction {
         let mut p = 0;
         while p < code.len() {
             let inst = code[p];
-            let param_1 = Some(i8::from_ne_bytes([code[p + 1]]));
-            let param_2 = Some(i8::from_ne_bytes([code[p + 2]]));
+            let param_1 = Some(i8::from_le_bytes([code[p + 1]]));
+            let param_2 = Some(i8::from_le_bytes([code[p + 2]]));
             let ep = Instruction::get_instruction(inst, 0);
             let count = Instruction::resolve_argument_count(ep);
             insts.push(match count {
