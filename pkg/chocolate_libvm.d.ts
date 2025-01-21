@@ -28,6 +28,13 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_program_free: (a: number, b: number) => void;
+  readonly program_new: () => number;
+  readonly program_push_instruction: (a: number, b: number, c: number) => void;
+  readonly program_get_inst_len: (a: number) => number;
+  readonly program_run_with_new_vm: (a: number) => void;
+  readonly program_get_instruction_str: (a: number, b: number) => [number, number];
+  readonly program_to_raw: (a: number) => [number, number];
   readonly __wbg_vmdata_free: (a: number, b: number) => void;
   readonly __wbg_get_vmdata_pc: (a: number) => number;
   readonly __wbg_set_vmdata_pc: (a: number, b: number) => void;
@@ -39,13 +46,6 @@ export interface InitOutput {
   readonly vmdata_execute_from_program: (a: number, b: number) => number;
   readonly vmdata_read_reg: (a: number, b: number) => number;
   readonly vmdata_read_stack: (a: number) => number;
-  readonly __wbg_program_free: (a: number, b: number) => void;
-  readonly program_new: () => number;
-  readonly program_push_instruction: (a: number, b: number, c: number) => void;
-  readonly program_get_inst_len: (a: number) => number;
-  readonly program_run_with_new_vm: (a: number) => void;
-  readonly program_get_instruction_str: (a: number, b: number) => [number, number];
-  readonly program_to_raw: (a: number) => [number, number];
   readonly greet: (a: number, b: number) => void;
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
