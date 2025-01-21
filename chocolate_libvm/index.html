@@ -198,7 +198,10 @@
             <button onclick="resetVM()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                 Reset
             </button>
-            <input type="file" id="fileInput" placeholder="Load program (will reset VM and remove unused parameter!!)">
+            <div>
+                <input type="file" id="fileInput">
+                <h4>Load program (will reset VM and remove unused parameter!!)</h4>
+            </div>
             <!-- download program button -->
              <button onclick="downloadProgram()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Download Program
@@ -222,21 +225,23 @@
         document
             .getElementById('fileInput')
             .addEventListener('change', function (event) {
-                let file = event.target.files[0];
-                let reader = new FileReader();
+                if (event.target.files[0]) {
+                    let file = event.target.files[0];
+                    let reader = new FileReader();
 
-                reader.onload = function (event) {
-                    let arrayBuffer = event.target.result;
-                    let u8array = new Uint8Array(arrayBuffer);
+                    reader.onload = function (eent) {
+                        let arrayBuffer = eent.target.result;
+                        let u8array = new Uint8Array(arrayBuffer);
 
-                    console.log('ArrayBuffer:', arrayBuffer);
-                    // pass the array to the wasm module
-                    program = Program.from_raw(u8array);
-                    updateDisplay();
-                };
+                        console.log('ArrayBuffer:', arrayBuffer);
+                        // pass the array to the wasm module
+                        program = Program.from_raw(u8array);
+                        updateDisplay();
+                    };
 
-                reader.readAsArrayBuffer(file);
-            });
+                    reader.readAsArrayBuffer(file);
+                }
+        });
 
         window.downloadProgram = function() {
             const raw = program.to_raw();
