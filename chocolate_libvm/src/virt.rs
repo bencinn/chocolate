@@ -161,6 +161,11 @@ impl VMData {
                     self.status = Status::Undefined;
                 }
             }
+            EP::PushR => {
+                if let Some(val) = inst.param_1 {
+                    self.push_stack(self.read_reg(val));
+                }
+            }
             EP::Interrupt => {
                 if let Some(val) = inst.param_1 {
                     self.status = Status::Int(val);
@@ -314,7 +319,7 @@ mod tests {
             param_2: None,
         };
         let int = Instruction {
-            inst: 9,
+            inst: 10,
             param_1: Some(0),
             param_2: None,
         };
@@ -328,7 +333,7 @@ mod tests {
     #[test]
     fn test_int_stuck() {
         let int = Instruction {
-            inst: 9,
+            inst: 10,
             param_1: Some(0),
             param_2: None,
         };
@@ -369,7 +374,7 @@ mod tests {
     #[test]
     fn test_compare() {
         let cmp = Instruction {
-            inst: 10,
+            inst: 11,
             param_1: Some(0),
             param_2: Some(1),
         };
@@ -385,7 +390,7 @@ mod tests {
     #[test]
     fn test_jump() {
         let jmp = Instruction {
-            inst: 11,
+            inst: 12,
             param_1: Some(1),
             param_2: None,
         };
@@ -410,7 +415,7 @@ mod tests {
     #[test]
     fn test_cmp_source_zero() {
         let cmp = Instruction {
-            inst: 10,
+            inst: 11,
             param_1: Some(1),
             param_2: Some(0),
         };
@@ -420,7 +425,7 @@ mod tests {
         vm.step_execute(&cmp);
         assert!(vm.flags[4]);
         let cmp2 = Instruction {
-            inst: 10,
+            inst: 11,
             param_1: Some(1),
             param_2: Some(1),
         };
@@ -431,7 +436,7 @@ mod tests {
     #[test]
     fn test_cmp() {
         let cmp = Instruction {
-            inst: 10,
+            inst: 11,
             param_1: Some(1),
             param_2: Some(0),
         };
@@ -443,7 +448,7 @@ mod tests {
         assert!(!vm.flags[1]);
         assert!(!vm.flags[2]);
         let cmp_lt = Instruction {
-            inst: 10,
+            inst: 11,
             param_1: Some(2),
             param_2: Some(1),
         };
@@ -457,7 +462,7 @@ mod tests {
     #[test]
     fn test_jz() {
         let jz = Instruction {
-            inst: 13,
+            inst: 14,
             param_1: Some(1),
             param_2: None,
         };
@@ -469,5 +474,23 @@ mod tests {
         vm.flags[4] = false;
         vm.step_execute(&jz);
         assert_eq!(vm.pc, 4);
+    }
+
+    #[test]
+    fn test_push_from_reg() {
+        let add = Instruction {
+            inst: 4,
+            param_1: Some(1),
+            param_2: Some(12),
+        };
+        let push_r = Instruction {
+            inst: 9,
+            param_1: Some(1),
+            param_2: None,
+        };
+        let mut vm = VMData::new();
+        vm.step_execute(&add);
+        vm.step_execute(&push_r);
+        assert_eq!(vm.read_stack(), Some(12));
     }
 }

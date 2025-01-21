@@ -19,6 +19,7 @@ pub enum EP {
     Read,
     Push,
     Pop,
+    PushR,
     Interrupt,
     Cmp,
     Jmp,
@@ -45,11 +46,12 @@ impl Instruction {
             6 => EP::Read,
             7 => EP::Push,
             8 => EP::Pop,
-            9 => EP::Interrupt,
-            10 => EP::Cmp,
-            11 => EP::Jmp,
-            12 => EP::Je,
-            13 => EP::Jz,
+            9 => EP::PushR,
+            10 => EP::Interrupt,
+            11 => EP::Cmp,
+            12 => EP::Jmp,
+            13 => EP::Je,
+            14 => EP::Jz,
             _ => EP::Invalid,
         }
     }
@@ -57,7 +59,14 @@ impl Instruction {
     fn resolve_argument_count(ep: EP) -> usize {
         match ep {
             EP::Invalid | EP::Halt => 0,
-            EP::Read | EP::Push | EP::Pop | EP::Interrupt | EP::Jmp | EP::Je | EP::Jz => 1,
+            EP::Read
+            | EP::Push
+            | EP::Pop
+            | EP::PushR
+            | EP::Interrupt
+            | EP::Jmp
+            | EP::Je
+            | EP::Jz => 1,
             EP::Mov | EP::AddR | EP::SubR | EP::Add | EP::Sub | EP::Cmp => 2,
         }
     }

@@ -5,7 +5,7 @@
 - 1 flag: less than
 - 2 flag: more than
 - 3 flag: overflow
-- 4 flag: (cmp source is ) zero
+- 4 flag: (cmp source is) zero
 
 ## Basic
 - (0) Halt
@@ -31,18 +31,20 @@ Read and copy the value to i8-$p1
 Push the value and increment the stack pointer. If the stack is empty this is undefined
 - (8) Pop p1
 Copy the stack head value to i8-$p1. If the stack is empty this is undefined
+- (9) PushR p1
+Push from register r1
 
 ## Interrupt
-Interrupt here works a bit different to others. The vm itself handle the interrupt. There are only one command: (9) Int p1, which will generate an interrupt. Interrupt can't modify the vm's data. If the interrupt doesn't exist, nothing is done. Here are all the possible interrupt.
+Interrupt here works a bit different to others. The vm itself handle the interrupt. There are only one command: (10) Int p1, which will generate an interrupt. Interrupt can't modify the vm's data. If the interrupt doesn't exist, nothing is done. Here are all the possible interrupt.
 - 0: stop the machine
 
 ## Control Flows
 Jump in this cases means setting the next instruction to be the value
-- (10) Cmp p1 p2
+- (11) Cmp p1 p2
 Compare value in register p1 and register p2 and set vm flags according to the result (p2 is refer as source, p1 is refer as dest)
-- (11) Jmp p1
+- (12) Jmp p1
 Jump to address in register p1 (specifically, set the next inst pointer to p1)
-- (12) Je p1
+- (13) Je p1
 Jump to address in register p1 if equal
-- (13) Jz p1
+- (14) Jz p1
 Jump to address in register p1 if source is zero (flag)
