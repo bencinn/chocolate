@@ -54,7 +54,7 @@ impl Program {
         }
     }
 
-    pub fn to_raw(&self) -> String {
+    pub fn to_raw_beautified(&self) -> String {
         let mut raw = String::new();
         for inst in &self.insts {
             let raw_inst = inst.to_raw();
@@ -64,5 +64,23 @@ impl Program {
             ));
         }
         raw
+    }
+
+    pub fn to_raw(&self) -> Vec<u8> {
+        let mut raw = Vec::new();
+        for inst in &self.insts {
+            let raw_inst = inst.to_raw();
+            raw.push(raw_inst[0]);
+            raw.push(raw_inst[1]);
+            raw.push(raw_inst[2]);
+            raw.push(raw_inst[3]);
+        }
+        raw
+    }
+
+    pub fn from_raw(raw: &[u8]) -> Program {
+        let mut program = Program::new();
+        program.insts = Instruction::from_raw(&raw);
+        program
     }
 }
