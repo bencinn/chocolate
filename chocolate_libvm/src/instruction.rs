@@ -25,6 +25,10 @@ pub enum EP {
     Jmp,
     Je,
     Jz,
+    Jrmp,
+    Jre,
+    Jrz,
+
     Invalid,
 }
 
@@ -52,6 +56,9 @@ impl Instruction {
             12 => EP::Jmp,
             13 => EP::Je,
             14 => EP::Jz,
+            15 => EP::Jrmp,
+            16 => EP::Jre,
+            17 => EP::Jrz,
             _ => EP::Invalid,
         }
     }
@@ -66,7 +73,10 @@ impl Instruction {
             | EP::Interrupt
             | EP::Jmp
             | EP::Je
-            | EP::Jz => 1,
+            | EP::Jz
+            | EP::Jrmp
+            | EP::Jre
+            | EP::Jrz => 1,
             EP::Mov | EP::AddR | EP::SubR | EP::Add | EP::Sub | EP::Cmp => 2,
         }
     }

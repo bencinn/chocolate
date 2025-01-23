@@ -185,7 +185,7 @@ impl VMData {
             }
             EP::Jmp => {
                 if let Some(val) = inst.param_1 {
-                    self.next = self.read_reg(val) as usize;
+                    self.next = val as usize;
                 } else {
                     self.status = Status::Undefined;
                 }
@@ -193,7 +193,7 @@ impl VMData {
             EP::Je => {
                 if let Some(val) = inst.param_1 {
                     if self.flags[0] {
-                        self.next = self.read_reg(val) as usize;
+                        self.next = val as usize;
                     }
                 } else {
                     self.status = Status::Undefined;
@@ -202,12 +202,38 @@ impl VMData {
             EP::Jz => {
                 if let Some(val) = inst.param_1 {
                     if self.flags[4] {
+                        self.next = val as usize;
+                    }
+                } else {
+                    self.status = Status::Undefined;
+                }
+            }
+            EP::Jrmp => {
+                if let Some(val) = inst.param_1 {
+                    self.next = self.read_reg(val) as usize;
+                } else {
+                    self.status = Status::Undefined;
+                }
+            }
+            EP::Jre => {
+                if let Some(val) = inst.param_1 {
+                    if self.flags[0] {
                         self.next = self.read_reg(val) as usize;
                     }
                 } else {
                     self.status = Status::Undefined;
                 }
             }
+            EP::Jrz => {
+                if let Some(val) = inst.param_1 {
+                    if self.flags[4] {
+                        self.next = self.read_reg(val) as usize;
+                    }
+                } else {
+                    self.status = Status::Undefined;
+                }
+            }
+
             EP::Invalid => {
                 self.status = Status::Undefined;
             }
@@ -391,6 +417,18 @@ mod tests {
     fn test_jump() {
         let jmp = Instruction {
             inst: 12,
+            param_1: Some(3),
+            param_2: None,
+        };
+        let mut vm = VMData::new();
+        vm.step_execute(&jmp);
+        assert_eq!(vm.pc, 3);
+    }
+
+    #[test]
+    fn test_jump_reg() {
+        let jmp = Instruction {
+            inst: 15,
             param_1: Some(1),
             param_2: None,
         };
@@ -463,11 +501,10 @@ mod tests {
     fn test_jz() {
         let jz = Instruction {
             inst: 14,
-            param_1: Some(1),
+            param_1: Some(3),
             param_2: None,
         };
         let mut vm = VMData::new();
-        vm.reg_8bit[1] = 3;
         vm.flags[4] = true;
         vm.step_execute(&jz);
         assert_eq!(vm.pc, 3);

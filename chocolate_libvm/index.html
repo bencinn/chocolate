@@ -169,6 +169,9 @@
                     <option value="12">(12) - Jmp</option>
                     <option value="13">(13) - Je</option>
                     <option value="14">(14) - Jz</option>
+                    <option value="12">(12) - Jrmp</option>
+                    <option value="13">(13) - Jre</option>
+                    <option value="14">(14) - Jrz</option>
                 </select>
                 <input type="number" id="param1" placeholder="Parameter 1" class="p-2 border rounded" />
                 <input type="number" id="param2" placeholder="Parameter 2" class="p-2 border rounded" />
@@ -257,7 +260,6 @@
 
         window.initializeVM = async function() {
             await init();
-            greet("WebAssembly");
             program = new Program();
             vm = new VMData();
             isInitialized = true;

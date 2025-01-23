@@ -43,8 +43,14 @@ Jump in this cases means setting the next instruction to be the value
 - (11) Cmp p1 p2
 Compare value in register p1 and register p2 and set vm flags according to the result (p2 is refer as source, p1 is refer as dest)
 - (12) Jmp p1
-Jump to address in register p1 (specifically, set the next inst pointer to p1)
+Jump to address p1 (specifically, set the next inst pointer to p1)
 - (13) Je p1
-Jump to address in register p1 if equal
+Jump to address p1 if equal
 - (14) Jz p1
+Jump to address p1 if source is zero (flag)
+- (15) Jrmp p1
+Jump to address in register p1 (specifically, set the next inst pointer to p1)
+- (16) Jre p1
+Jump to address in register p1 if equal
+- (17) Jrz p1
 Jump to address in register p1 if source is zero (flag)
