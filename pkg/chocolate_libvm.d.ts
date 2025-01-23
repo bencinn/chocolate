@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export function greet(name: string): void;
 export class Program {
   free(): void;
   constructor();
@@ -21,6 +20,7 @@ export class VMData {
   execute_from_program(p: Program): boolean;
   read_reg(reg: number): number;
   read_stack(): number | undefined;
+  read_stack_at(idx: number): number | undefined;
   pc: number;
   next: number;
   sc: number;
@@ -30,7 +30,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly greet: (a: number, b: number) => void;
   readonly __wbg_vmdata_free: (a: number, b: number) => void;
   readonly __wbg_get_vmdata_pc: (a: number) => number;
   readonly __wbg_set_vmdata_pc: (a: number, b: number) => void;
@@ -42,6 +41,7 @@ export interface InitOutput {
   readonly vmdata_execute_from_program: (a: number, b: number) => number;
   readonly vmdata_read_reg: (a: number, b: number) => number;
   readonly vmdata_read_stack: (a: number) => number;
+  readonly vmdata_read_stack_at: (a: number, b: number) => number;
   readonly __wbg_program_free: (a: number, b: number) => void;
   readonly program_new: () => number;
   readonly program_push_instruction: (a: number, b: number, c: number) => void;

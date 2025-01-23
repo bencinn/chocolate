@@ -169,6 +169,9 @@
                     <option value="12">(12) - Jmp</option>
                     <option value="13">(13) - Je</option>
                     <option value="14">(14) - Jz</option>
+                    <option value="12">(12) - Jrmp</option>
+                    <option value="13">(13) - Jre</option>
+                    <option value="14">(14) - Jrz</option>
                 </select>
                 <input type="number" id="param1" placeholder="Parameter 1" class="p-2 border rounded" />
                 <input type="number" id="param2" placeholder="Parameter 2" class="p-2 border rounded" />
@@ -217,7 +220,7 @@
     </div>
 
     <script type="module">
-        import init, { greet, Program, VMData } from "./pkg/chocolate_libvm.js";
+        import init, { Program, VMData } from "./pkg/chocolate_libvm.js";
 
         let program;
         let vm;
@@ -233,8 +236,6 @@
                     reader.onload = function (eent) {
                         let arrayBuffer = eent.target.result;
                         let u8array = new Uint8Array(arrayBuffer);
-
-                        console.log('ArrayBuffer:', arrayBuffer);
                         // pass the array to the wasm module
                         program = Program.from_raw(u8array);
                         updateDisplay();
@@ -257,7 +258,6 @@
 
         window.initializeVM = async function() {
             await init();
-            greet("WebAssembly");
             program = new Program();
             vm = new VMData();
             isInitialized = true;
@@ -319,7 +319,7 @@
                 states.push(`Register ${i}: ${vm.read_reg(i)}`);
             }
             for (let i = 0; i < vm.sc; i++) {
-                states.push(`Stack ${i}: ${vm.read_stack(i)}`);
+                states.push(`Stack ${i}: ${vm.read_stack_at(i)}`);
             }
             vmState.textContent = states.join('\n');
 
