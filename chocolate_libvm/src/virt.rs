@@ -61,10 +61,18 @@ impl VMData {
     }
 
     pub fn read_stack(&self) -> Option<i8> {
-        if self.sc < 1 {
-            None
-        } else {
+        if self.sc > 0 {
             Some(self.stack[self.sc - 1])
+        } else {
+            None
+        }
+    }
+
+    pub fn read_stack_at(&self, idx: usize) -> Option<i8> {
+        if idx < self.sc {
+            Some(self.stack[idx])
+        } else {
+            None
         }
     }
 }

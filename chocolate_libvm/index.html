@@ -220,7 +220,7 @@
     </div>
 
     <script type="module">
-        import init, { greet, Program, VMData } from "./pkg/chocolate_libvm.js";
+        import init, { Program, VMData } from "./pkg/chocolate_libvm.js";
 
         let program;
         let vm;
@@ -236,8 +236,6 @@
                     reader.onload = function (eent) {
                         let arrayBuffer = eent.target.result;
                         let u8array = new Uint8Array(arrayBuffer);
-
-                        console.log('ArrayBuffer:', arrayBuffer);
                         // pass the array to the wasm module
                         program = Program.from_raw(u8array);
                         updateDisplay();
@@ -321,7 +319,7 @@
                 states.push(`Register ${i}: ${vm.read_reg(i)}`);
             }
             for (let i = 0; i < vm.sc; i++) {
-                states.push(`Stack ${i}: ${vm.read_stack(i)}`);
+                states.push(`Stack ${i}: ${vm.read_stack_at(i)}`);
             }
             vmState.textContent = states.join('\n');
 
