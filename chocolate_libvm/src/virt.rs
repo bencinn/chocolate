@@ -7,7 +7,7 @@ use crate::{
 
 pub enum Status {
     Normal,
-    Int(i8),
+    Int(u8),
     Undefined,
 }
 
@@ -28,6 +28,9 @@ pub struct VMData {
 
     status: Status,
 }
+
+#[wasm_bindgen]
+pub struct WhatTheFuckWhyDoINeedToDoThisThisIsSoUgly(pub u8, pub u8);
 
 #[wasm_bindgen]
 impl VMData {
@@ -73,6 +76,15 @@ impl VMData {
             Some(self.stack[idx])
         } else {
             None
+        }
+    }
+
+
+    pub fn read_status(&self) -> WhatTheFuckWhyDoINeedToDoThisThisIsSoUgly {
+        match self.status {
+            Status::Normal => WhatTheFuckWhyDoINeedToDoThisThisIsSoUgly(0,0),
+            Status::Int(a) => WhatTheFuckWhyDoINeedToDoThisThisIsSoUgly(1, a),
+            Status::Undefined => WhatTheFuckWhyDoINeedToDoThisThisIsSoUgly(2, 0),
         }
     }
 }
@@ -176,7 +188,7 @@ impl VMData {
             }
             EP::Interrupt => {
                 if let Some(val) = inst.param_1 {
-                    self.status = Status::Int(val);
+                    self.status = Status::Int(val as u8);
                 } else {
                     self.status = Status::Undefined;
                 }

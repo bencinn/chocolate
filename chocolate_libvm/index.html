@@ -313,6 +313,15 @@
             // Update VM state
             const vmState = document.getElementById('vmState');
             let states = [];
+            if (vm.read_status()[0] == 0) {
+                states.push(`Status: Normal`);
+            }
+            else if (vm.read_status()[0] == 1) {
+                states.push(`Status: Interrupt ${vm.read_status()[1]}`)
+            }
+            else {
+                states.push("States: Undefined")
+            }
             states.push(`Program Counter: ${vm.pc}`);
             states.push(`Stack Counter: ${vm.sc}`);
             for (let i = 0; i < 16; i++) {
