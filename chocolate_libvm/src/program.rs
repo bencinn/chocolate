@@ -23,6 +23,11 @@ impl Program {
         self.insts.push(Instruction::from_json(inst).unwrap());
     }
 
+    pub fn insert_at(&mut self, inst: &str, after: u8) {
+        self.insts
+            .insert(after.into(), Instruction::from_json(inst).unwrap());
+    }
+
     pub fn get_inst_len(&self) -> usize {
         self.insts.len()
     }
