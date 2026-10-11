@@ -117,11 +117,15 @@ export class Program {
         const ptr = this.__destroy_into_raw();
         wasm.__wbg_program_free(ptr, 0);
     }
-    constructor() {
-        const ret = wasm.program_new();
-        this.__wbg_ptr = ret >>> 0;
-        ProgramFinalization.register(this, this.__wbg_ptr, this);
-        return this;
+    /**
+     * @returns {number}
+     */
+    get_inst_len() {
+        const ret = wasm.program_get_inst_len(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    run_with_new_vm() {
+        wasm.program_run_with_new_vm(this.__wbg_ptr);
     }
     /**
      * @param {string} inst
@@ -132,14 +136,19 @@ export class Program {
         wasm.program_push_instruction(this.__wbg_ptr, ptr0, len0);
     }
     /**
-     * @returns {number}
+     * @returns {string}
      */
-    get_inst_len() {
-        const ret = wasm.program_get_inst_len(this.__wbg_ptr);
-        return ret >>> 0;
-    }
-    run_with_new_vm() {
-        wasm.program_run_with_new_vm(this.__wbg_ptr);
+    to_raw_beautified() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.program_to_raw_beautified(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
     }
     /**
      * @param {number} pos
@@ -157,20 +166,11 @@ export class Program {
             wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
         }
     }
-    /**
-     * @returns {string}
-     */
-    to_raw_beautified() {
-        let deferred1_0;
-        let deferred1_1;
-        try {
-            const ret = wasm.program_to_raw_beautified(this.__wbg_ptr);
-            deferred1_0 = ret[0];
-            deferred1_1 = ret[1];
-            return getStringFromWasm0(ret[0], ret[1]);
-        } finally {
-            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
-        }
+    constructor() {
+        const ret = wasm.program_new();
+        this.__wbg_ptr = ret >>> 0;
+        ProgramFinalization.register(this, this.__wbg_ptr, this);
+        return this;
     }
     /**
      * @returns {Uint8Array}
@@ -249,30 +249,6 @@ export class VMData {
     set sc(arg0) {
         wasm.__wbg_set_vmdata_sc(this.__wbg_ptr, arg0);
     }
-    constructor() {
-        const ret = wasm.vmdata_new();
-        this.__wbg_ptr = ret >>> 0;
-        VMDataFinalization.register(this, this.__wbg_ptr, this);
-        return this;
-    }
-    /**
-     * execute and retusn whether you can continue to execute
-     * @param {Program} p
-     * @returns {boolean}
-     */
-    execute_from_program(p) {
-        _assertClass(p, Program);
-        const ret = wasm.vmdata_execute_from_program(this.__wbg_ptr, p.__wbg_ptr);
-        return ret !== 0;
-    }
-    /**
-     * @param {number} reg
-     * @returns {number}
-     */
-    read_reg(reg) {
-        const ret = wasm.vmdata_read_reg(this.__wbg_ptr, reg);
-        return ret;
-    }
     /**
      * @returns {number | undefined}
      */
@@ -287,6 +263,30 @@ export class VMData {
     read_stack_at(idx) {
         const ret = wasm.vmdata_read_stack_at(this.__wbg_ptr, idx);
         return ret === 0xFFFFFF ? undefined : ret;
+    }
+    /**
+     * execute and retusn whether you can continue to execute
+     * @param {Program} p
+     * @returns {boolean}
+     */
+    execute_from_program(p) {
+        _assertClass(p, Program);
+        const ret = wasm.vmdata_execute_from_program(this.__wbg_ptr, p.__wbg_ptr);
+        return ret !== 0;
+    }
+    constructor() {
+        const ret = wasm.vmdata_new();
+        this.__wbg_ptr = ret >>> 0;
+        VMDataFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * @param {number} reg
+     * @returns {number}
+     */
+    read_reg(reg) {
+        const ret = wasm.vmdata_read_reg(this.__wbg_ptr, reg);
+        return ret;
     }
 }
 

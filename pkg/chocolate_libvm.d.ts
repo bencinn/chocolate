@@ -2,25 +2,25 @@
 /* eslint-disable */
 export class Program {
   free(): void;
-  constructor();
-  push_instruction(inst: string): void;
   get_inst_len(): number;
   run_with_new_vm(): void;
-  get_instruction_str(pos: number): string;
+  push_instruction(inst: string): void;
   to_raw_beautified(): string;
+  get_instruction_str(pos: number): string;
+  constructor();
   to_raw(): Uint8Array;
   static from_raw(raw: Uint8Array): Program;
 }
 export class VMData {
   free(): void;
-  constructor();
+  read_stack(): number | undefined;
+  read_stack_at(idx: number): number | undefined;
   /**
    * execute and retusn whether you can continue to execute
    */
   execute_from_program(p: Program): boolean;
+  constructor();
   read_reg(reg: number): number;
-  read_stack(): number | undefined;
-  read_stack_at(idx: number): number | undefined;
   pc: number;
   next: number;
   sc: number;
@@ -30,27 +30,27 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly __wbg_vmdata_free: (a: number, b: number) => void;
-  readonly __wbg_get_vmdata_pc: (a: number) => number;
-  readonly __wbg_set_vmdata_pc: (a: number, b: number) => void;
   readonly __wbg_get_vmdata_next: (a: number) => number;
-  readonly __wbg_set_vmdata_next: (a: number, b: number) => void;
+  readonly __wbg_get_vmdata_pc: (a: number) => number;
   readonly __wbg_get_vmdata_sc: (a: number) => number;
+  readonly __wbg_set_vmdata_next: (a: number, b: number) => void;
+  readonly __wbg_set_vmdata_pc: (a: number, b: number) => void;
   readonly __wbg_set_vmdata_sc: (a: number, b: number) => void;
-  readonly vmdata_new: () => number;
+  readonly __wbg_vmdata_free: (a: number, b: number) => void;
   readonly vmdata_execute_from_program: (a: number, b: number) => number;
+  readonly vmdata_new: () => number;
   readonly vmdata_read_reg: (a: number, b: number) => number;
   readonly vmdata_read_stack: (a: number) => number;
   readonly vmdata_read_stack_at: (a: number, b: number) => number;
   readonly __wbg_program_free: (a: number, b: number) => void;
+  readonly program_from_raw: (a: number, b: number) => number;
+  readonly program_get_inst_len: (a: number) => number;
+  readonly program_get_instruction_str: (a: number, b: number) => [number, number];
   readonly program_new: () => number;
   readonly program_push_instruction: (a: number, b: number, c: number) => void;
-  readonly program_get_inst_len: (a: number) => number;
   readonly program_run_with_new_vm: (a: number) => void;
-  readonly program_get_instruction_str: (a: number, b: number) => [number, number];
-  readonly program_to_raw_beautified: (a: number) => [number, number];
   readonly program_to_raw: (a: number) => [number, number];
-  readonly program_from_raw: (a: number, b: number) => number;
+  readonly program_to_raw_beautified: (a: number) => [number, number];
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
