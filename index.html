@@ -329,6 +329,12 @@
 
         // Initialize VM when page loads
         initializeVM();
+
+        const params = new URLSearchParams(location.search);
+        if (params.has('bytecode')) {
+            program = Program.from_raw(Uint8Array.fromHex(params.get('bytecode')));
+            updateDisplay();
+        }
     </script>
 </body>
 </html>
