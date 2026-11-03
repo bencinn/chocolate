@@ -328,7 +328,7 @@
         }
 
         // Initialize VM when page loads
-        initializeVM();
+        await initializeVM();
 
         const params = new URLSearchParams(location.search);
         if (params.has('bytecode')) {
